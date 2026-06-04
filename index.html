@@ -5,6 +5,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Silver Monitor – Trading Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+<script>
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.init({
+      appId: "cf4ec447-ff52-4845-a7c3-867e448d85a4",
+      notifyButton: { enable: false },
+      welcomeNotification: { disable: true }
+    });
+  });
+</script>
 <style>
 :root {
   --bg: #0D1117;
@@ -1084,7 +1095,7 @@ footer {
       <button class="lang-btn active" onclick="setLang('cz')">CZ</button>
       <button class="lang-btn" onclick="setLang('en')">EN</button>
     </div>
-    <a href="#pricing" class="btn-nav" data-cz="Začít" data-en="Get started">Začít</a>
+    <a href="#" onclick="openModal();return false;" class="btn-nav" data-cz="Začít" data-en="Get started">Začít</a>
   </div>
 </nav>
 
@@ -1142,7 +1153,7 @@ footer {
       Přesné signály, hloubkové analýzy a vzdělávání pro retailové tradery. Vše na jednom místě — od prvního obchodu po konzistentní zisk.
     </p>
     <div class="hero-cta">
-      <a href="#pricing" class="btn-primary" data-cz="Vybrat plán" data-en="Choose a plan">Vybrat plán</a>
+      <a href="#" onclick="openModal();return false;" class="btn-primary" data-cz="Vybrat plán" data-en="Choose a plan">Vybrat plán</a>
       <a href="#how" class="btn-ghost" data-cz="Jak to funguje?" data-en="How does it work?">Jak to funguje?</a>
     </div>
     <div class="hero-stats">
@@ -1561,7 +1572,7 @@ footer {
     <h2 data-cz="Připraven obchodovat <em>chytřeji</em>?" data-en="Ready to trade <em>smarter</em>?">Připraven obchodovat <em>chytřeji</em>?</h2>
     <p data-cz="Prvních 14 dní zdarma. Zrušit můžeš kdykoliv. Žádná platební karta při registraci." data-en="First 14 days free. Cancel anytime. No credit card at signup.">Prvních 14 dní zdarma. Zrušit můžeš kdykoliv. Žádná platební karta při registraci.</p>
     <div class="cta-btns">
-      <a href="#pricing" class="btn-primary" data-cz="Začít zdarma" data-en="Start for free">Začít zdarma</a>
+      <a href="#" onclick="openModal();return false;" class="btn-primary" data-cz="Začít zdarma" data-en="Start for free">Začít zdarma</a>
       <a href="#features" class="btn-ghost" data-cz="Zjistit více" data-en="Learn more">Zjistit více</a>
     </div>
   </div>
@@ -1633,6 +1644,101 @@ window.addEventListener('scroll', () => {
     ? 'rgba(13,17,23,0.95)'
     : 'rgba(13,17,23,0.85)';
 });
+
+// ── MODAL ──
+function openModal() {
+  document.getElementById('reg-modal').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('reg-modal').style.display = 'none';
+  document.body.style.overflow = '';
+  document.getElementById('reg-form').style.display = 'flex';
+  document.getElementById('reg-success').style.display = 'none';
+  document.getElementById('reg-form-el').reset();
+}
+
+document.getElementById('reg-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+document.getElementById('reg-form-el').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  const btn = document.getElementById('reg-submit');
+  btn.textContent = '...';
+  btn.disabled = true;
+  try {
+    const res = await fetch('https://formspree.io/f/mvzlzygj', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(this)
+    });
+    if (res.ok) {
+      document.getElementById('reg-form').style.display = 'none';
+      document.getElementById('reg-success').style.display = 'block';
+      // Prompt push notifications after successful registration
+      if (window.OneSignalDeferred && document.getElementById('push-check').checked) {
+        OneSignalDeferred.push(async function(OneSignal) {
+          try { await OneSignal.Notifications.requestPermission(); } catch(e) {}
+        });
+      }
+    } else {
+      btn.textContent = 'Chyba — zkuste znovu';
+      btn.disabled = false;
+    }
+  } catch {
+    btn.textContent = 'Chyba — zkuste znovu';
+    btn.disabled = false;
+  }
+});
 </script>
+
+<!-- MODAL -->
+<div id="reg-modal" style="display:none;position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.75);align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#131920;border:0.5px solid rgba(29,158,117,0.25);border-radius:20px;width:100%;max-width:480px;position:relative;overflow:hidden;">
+    <!-- close -->
+    <button onclick="closeModal()" style="position:absolute;top:16px;right:18px;background:none;border:none;color:#7A9A8E;font-size:22px;cursor:pointer;line-height:1;">×</button>
+    <!-- header -->
+    <div style="padding:32px 32px 24px;border-bottom:0.5px solid rgba(200,212,204,0.08);">
+      <div style="font-size:10px;letter-spacing:3px;color:#1D9E75;text-transform:uppercase;margin-bottom:8px;" data-cz="Začít zdarma" data-en="Get started">Začít zdarma</div>
+      <div style="font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#E8F0EC;line-height:1.2;" data-cz="Získat přístup k Silver Monitor" data-en="Get access to Silver Monitor">Získat přístup k Silver Monitor</div>
+    </div>
+    <!-- form -->
+    <div id="reg-form" style="padding:28px 32px 32px;display:flex;flex-direction:column;gap:18px;">
+      <form id="reg-form-el" style="display:flex;flex-direction:column;gap:16px;">
+        <div>
+          <label style="font-size:11px;letter-spacing:1.5px;color:#7A9A8E;text-transform:uppercase;display:block;margin-bottom:6px;" data-cz="Jméno a příjmení *" data-en="Full name *">Jméno a příjmení *</label>
+          <input type="text" name="name" required placeholder="Jan Novák" style="width:100%;background:#0D1117;border:0.5px solid rgba(200,212,204,0.15);border-radius:10px;padding:12px 14px;color:#E8F0EC;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" onfocus="this.style.borderColor='rgba(29,158,117,0.5)'" onblur="this.style.borderColor='rgba(200,212,204,0.15)'"/>
+        </div>
+        <div>
+          <label style="font-size:11px;letter-spacing:1.5px;color:#7A9A8E;text-transform:uppercase;display:block;margin-bottom:6px;" data-cz="E-mail *" data-en="E-mail *">E-mail *</label>
+          <input type="email" name="email" required placeholder="jan@example.com" style="width:100%;background:#0D1117;border:0.5px solid rgba(200,212,204,0.15);border-radius:10px;padding:12px 14px;color:#E8F0EC;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" onfocus="this.style.borderColor='rgba(29,158,117,0.5)'" onblur="this.style.borderColor='rgba(200,212,204,0.15)'"/>
+        </div>
+        <div>
+          <label style="font-size:11px;letter-spacing:1.5px;color:#7A9A8E;text-transform:uppercase;display:block;margin-bottom:6px;" data-cz="Telefon" data-en="Phone">Telefon</label>
+          <input type="tel" name="phone" placeholder="+420 123 456 789" style="width:100%;background:#0D1117;border:0.5px solid rgba(200,212,204,0.15);border-radius:10px;padding:12px 14px;color:#E8F0EC;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" onfocus="this.style.borderColor='rgba(29,158,117,0.5)'" onblur="this.style.borderColor='rgba(200,212,204,0.15)'"/>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:rgba(29,158,117,0.06);border-radius:10px;border:0.5px solid rgba(29,158,117,0.15);">
+          <input type="checkbox" name="gdpr" required id="gdpr-check" style="margin-top:3px;accent-color:#1D9E75;flex-shrink:0;width:16px;height:16px;cursor:pointer;"/>
+          <label for="gdpr-check" style="font-size:12px;color:#7A9A8E;line-height:1.5;cursor:pointer;" data-cz="Souhlasím se zpracováním osobních údajů za účelem zasílání signálů a informací o Silver Monitor." data-en="I agree to the processing of personal data for the purpose of sending signals and Silver Monitor information.">Souhlasím se zpracováním osobních údajů za účelem zasílání signálů a informací o Silver Monitor.</label>
+        </div>
+        <div style="display:flex;align-items:flex-start;gap:10px;padding:14px;background:rgba(29,158,117,0.04);border-radius:10px;border:0.5px solid rgba(29,158,117,0.1);">
+          <input type="checkbox" id="push-check" style="margin-top:3px;accent-color:#1D9E75;flex-shrink:0;width:16px;height:16px;cursor:pointer;"/>
+          <label for="push-check" style="font-size:12px;color:#7A9A8E;line-height:1.5;cursor:pointer;" data-cz="Chci dostávat push notifikace o nových signálech přímo do prohlížeče." data-en="I want to receive push notifications about new signals directly in my browser.">Chci dostávat push notifikace o nových signálech přímo do prohlížeče.</label>
+        </div>
+        <button type="submit" id="reg-submit" style="width:100%;padding:14px;background:#1D9E75;color:#fff;border:none;border-radius:12px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:600;cursor:pointer;letter-spacing:0.5px;transition:background 0.2s;" onmouseover="this.style.background='#25C490'" onmouseout="this.style.background='#1D9E75'" data-cz="Získat přístup →" data-en="Get access →">Získat přístup →</button>
+      </form>
+    </div>
+    <!-- success -->
+    <div id="reg-success" style="display:none;padding:40px 32px;text-align:center;">
+      <div style="font-size:40px;margin-bottom:16px;">✅</div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#E8F0EC;margin-bottom:10px;" data-cz="Registrace přijata!" data-en="Registration received!">Registrace přijata!</div>
+      <div style="font-size:14px;color:#7A9A8E;line-height:1.7;margin-bottom:24px;" data-cz="Brzy se ozveme s přístupovými údaji." data-en="We'll be in touch with access details soon.">Brzy se ozveme s přístupovými údaji.</div>
+      <button onclick="closeModal()" style="padding:12px 28px;background:#1D9E75;color:#fff;border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;cursor:pointer;" data-cz="Zavřít" data-en="Close">Zavřít</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
