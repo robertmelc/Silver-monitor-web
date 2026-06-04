@@ -1659,42 +1659,42 @@ function closeModal() {
   document.getElementById('reg-form-el').reset();
 }
 
-document.getElementById('reg-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeModal();
-});
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('reg-modal').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
 
-document.getElementById('reg-form-el').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  const btn = document.getElementById('reg-submit');
-  const origText = btn.textContent;
-  btn.textContent = '...';
-  btn.disabled = true;
-  try {
-    const formData = new FormData(this);
-    const res = await fetch('https://formspree.io/f/mvzlzygj', {
-      method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: formData
-    });
-    const data = await res.json();
-    if (res.ok) {
-      document.getElementById('reg-form').style.display = 'none';
-      document.getElementById('reg-success').style.display = 'block';
-      if (window.OneSignalDeferred && document.getElementById('push-check').checked) {
-        OneSignalDeferred.push(async function(OneSignal) {
-          try { await OneSignal.Notifications.requestPermission(); } catch(e) {}
-        });
+  document.getElementById('reg-form-el').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    const btn = document.getElementById('reg-submit');
+    btn.textContent = '...';
+    btn.disabled = true;
+    try {
+      const res = await fetch('https://formspree.io/f/mvzlzygj', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(this)
+      });
+      const data = await res.json();
+      if (res.ok) {
+        document.getElementById('reg-form').style.display = 'none';
+        document.getElementById('reg-success').style.display = 'block';
+        if (window.OneSignalDeferred && document.getElementById('push-check').checked) {
+          OneSignalDeferred.push(async function(OneSignal) {
+            try { await OneSignal.Notifications.requestPermission(); } catch(e) {}
+          });
+        }
+      } else {
+        btn.textContent = data.error || 'Chyba — zkuste znovu';
+        btn.disabled = false;
       }
-    } else {
-      btn.textContent = data.error || 'Chyba — zkuste znovu';
+    } catch(err) {
+      btn.textContent = 'Chyba — zkuste znovu';
       btn.disabled = false;
     }
-  } catch(err) {
-    btn.textContent = 'Chyba — zkuste znovu';
-    btn.disabled = false;
-  }
-  return false;
+    return false;
+  });
 });
 </script>
 
@@ -1710,7 +1710,7 @@ document.getElementById('reg-form-el').addEventListener('submit', async function
     </div>
     <!-- form -->
     <div id="reg-form" style="padding:28px 32px 32px;display:flex;flex-direction:column;gap:18px;">
-      <form id="reg-form-el" style="display:flex;flex-direction:column;gap:16px;">
+      <form id="reg-form-el" onsubmit="return false;" style="display:flex;flex-direction:column;gap:16px;">
         <div>
           <label style="font-size:11px;letter-spacing:1.5px;color:#7A9A8E;text-transform:uppercase;display:block;margin-bottom:6px;" data-cz="Jméno a příjmení *" data-en="Full name *">Jméno a příjmení *</label>
           <input type="text" name="name" required placeholder="Jan Novák" style="width:100%;background:#0D1117;border:0.5px solid rgba(200,212,204,0.15);border-radius:10px;padding:12px 14px;color:#E8F0EC;font-family:'DM Sans',sans-serif;font-size:14px;outline:none;" onfocus="this.style.borderColor='rgba(29,158,117,0.5)'" onblur="this.style.borderColor='rgba(200,212,204,0.15)'"/>
