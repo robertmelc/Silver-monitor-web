@@ -1665,32 +1665,36 @@ document.getElementById('reg-modal').addEventListener('click', function(e) {
 
 document.getElementById('reg-form-el').addEventListener('submit', async function(e) {
   e.preventDefault();
+  e.stopPropagation();
   const btn = document.getElementById('reg-submit');
+  const origText = btn.textContent;
   btn.textContent = '...';
   btn.disabled = true;
   try {
+    const formData = new FormData(this);
     const res = await fetch('https://formspree.io/f/mvzlzygj', {
       method: 'POST',
       headers: { 'Accept': 'application/json' },
-      body: new FormData(this)
+      body: formData
     });
+    const data = await res.json();
     if (res.ok) {
       document.getElementById('reg-form').style.display = 'none';
       document.getElementById('reg-success').style.display = 'block';
-      // Prompt push notifications after successful registration
       if (window.OneSignalDeferred && document.getElementById('push-check').checked) {
         OneSignalDeferred.push(async function(OneSignal) {
           try { await OneSignal.Notifications.requestPermission(); } catch(e) {}
         });
       }
     } else {
-      btn.textContent = 'Chyba — zkuste znovu';
+      btn.textContent = data.error || 'Chyba — zkuste znovu';
       btn.disabled = false;
     }
-  } catch {
+  } catch(err) {
     btn.textContent = 'Chyba — zkuste znovu';
     btn.disabled = false;
   }
+  return false;
 });
 </script>
 
