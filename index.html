@@ -179,11 +179,223 @@ nav {
   pointer-events: none;
 }
 
+.hero-inner {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 60px;
+  width: 100%;
+  max-width: 1100px;
+}
+
 .hero-content {
   position: relative;
   z-index: 2;
   text-align: center;
-  max-width: 780px;
+  max-width: 620px;
+  flex-shrink: 0;
+}
+
+/* ── FLOATING VOUCHER ── */
+.hero-voucher {
+  position: relative;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  animation: floatVoucher 6s ease-in-out infinite;
+}
+
+@keyframes floatVoucher {
+  0%, 100% { transform: translateY(0px) rotate(3deg); }
+  50%       { transform: translateY(-14px) rotate(3deg); }
+}
+
+.voucher-card {
+  width: 230px;
+  background: #DFF2EC;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid rgba(20,130,100,0.18);
+  position: relative;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.45), 0 4px 16px rgba(29,158,117,0.15);
+}
+
+.voucher-card-back {
+  width: 230px;
+  background: #DFF2EC;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid rgba(20,130,100,0.18);
+  position: absolute;
+  top: 12px;
+  left: -14px;
+  z-index: -1;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  transform: rotate(-5deg);
+}
+
+.vc-grid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(20,120,100,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(20,120,100,0.06) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
+}
+
+.vc-top { padding: 18px 16px 12px; }
+
+.vc-toprow { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+
+.vc-codebox {
+  background: rgba(255,255,255,0.58);
+  border: 0.5px solid rgba(20,130,100,0.2);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.vc-codelabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  letter-spacing: 2.5px;
+  color: #4A8A78;
+  margin-bottom: 3px;
+  text-transform: uppercase;
+}
+
+.vc-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  color: #1A3530;
+}
+
+.vc-codeurl {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: #5A9A88;
+  margin-top: 2px;
+}
+
+.vc-perf {
+  display: flex;
+  align-items: center;
+  margin: 0 -1px;
+}
+
+.vc-dot {
+  width: 16px; height: 16px;
+  background: #f0f4f2;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.vc-dash {
+  flex: 1;
+  border-top: 1.2px dashed rgba(20,140,100,0.35);
+}
+
+.vc-bottom { padding: 12px 16px 16px; }
+
+.vc-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(20,140,100,0.1);
+  border: 0.5px solid rgba(20,140,100,0.28);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  color: #0F6E56;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+}
+
+.vc-fieldlabel {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  letter-spacing: 2px;
+  color: #4A8A78;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+}
+
+.vc-phone {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  color: #1A3530;
+  margin-bottom: 10px;
+}
+
+.vc-phone span { color: #4A8A78; font-weight: 400; }
+
+.vc-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 9px;
+  color: #4A8A78;
+  line-height: 1.6;
+  margin-bottom: 10px;
+  padding: 7px 0;
+  border-top: 0.5px dashed rgba(20,130,100,0.22);
+  border-bottom: 0.5px dashed rgba(20,130,100,0.22);
+}
+
+.vc-row2 { display: flex; justify-content: space-between; align-items: flex-end; }
+
+.vc-date {
+  font-family: 'Playfair Display', serif;
+  font-size: 12px;
+  color: #1A3530;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.vc-codeaccent {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  font-weight: 500;
+  color: #0F8A6A;
+  text-align: right;
+  margin-top: 2px;
+}
+
+.vc-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px;
+  border-top: 0.5px solid rgba(20,130,100,0.14);
+}
+
+.vc-brandname {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: #1A3530;
+}
+
+.vc-brandname span { color: #0F8A6A; }
+
+.vc-brandsub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 7px;
+  color: #4A8A78;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.vc-barcode { display: flex; align-items: flex-end; gap: 1px; height: 18px; }
+.vc-bar { background: rgba(20,120,90,0.2); border-radius: 1px; }
+
+@media (max-width: 900px) {
+  .hero-inner { flex-direction: column; gap: 40px; }
+  .hero-voucher { display: none; }
 }
 
 .hero-badge {
@@ -896,6 +1108,7 @@ footer {
     </svg>
   </div>
 
+  <div class="hero-inner">
   <div class="hero-content">
     <div class="hero-badge">
       <div class="hero-badge-dot"></div>
@@ -926,6 +1139,71 @@ footer {
       </div>
     </div>
   </div>
+
+  <!-- FLOATING VOUCHER -->
+  <div class="hero-voucher">
+    <!-- back card (decorative) -->
+    <div class="voucher-card-back">
+      <div class="vc-grid"></div>
+      <div class="vc-top" style="padding:18px 16px 60px;"></div>
+    </div>
+    <!-- front card -->
+    <div class="voucher-card">
+      <div class="vc-grid"></div>
+      <div class="vc-top">
+        <div class="vc-toprow">
+          <svg width="110" height="36" viewBox="0 0 110 36" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="10" cy="18" r="9" fill="#1D9E75"/>
+            <circle cx="14" cy="15" r="7.5" fill="#DFF2EC"/>
+            <line x1="26" y1="6" x2="26" y2="10" stroke="#1D9E75" stroke-width="1.2"/><rect x="23" y="10" width="6" height="13" rx="1.2" fill="#1D9E75"/><line x1="26" y1="23" x2="26" y2="27" stroke="#1D9E75" stroke-width="1.2"/>
+            <line x1="35" y1="8" x2="35" y2="12" stroke="#1A3530" stroke-width="1.2"/><rect x="32" y="12" width="6" height="10" rx="1.2" fill="#1A3530"/><line x1="35" y1="22" x2="35" y2="28" stroke="#1A3530" stroke-width="1.2"/>
+            <line x1="44" y1="11" x2="44" y2="14" stroke="#1D9E75" stroke-width="1.2"/><rect x="41" y="14" width="6" height="8" rx="1.2" fill="#1D9E75"/><line x1="44" y1="22" x2="44" y2="26" stroke="#1D9E75" stroke-width="1.2"/>
+            <line x1="53" y1="5" x2="53" y2="9" stroke="#1A3530" stroke-width="1.2"/><rect x="50" y="9" width="6" height="16" rx="1.2" fill="#1A3530"/><line x1="53" y1="25" x2="53" y2="30" stroke="#1A3530" stroke-width="1.2"/>
+            <text x="63" y="15" font-family="Georgia,serif" font-size="10" font-weight="700" fill="#1A3530">silver</text>
+            <text x="63" y="27" font-family="Georgia,serif" font-size="10" font-weight="400" fill="#0F8A6A">monitor</text>
+          </svg>
+          <div style="width:32px;height:32px;background:rgba(255,255,255,0.5);border-radius:9px;border:0.5px solid rgba(20,130,100,0.2);display:flex;align-items:center;justify-content:center;font-size:16px;">🌐</div>
+        </div>
+        <div class="vc-codebox">
+          <div class="vc-codelabel">Voucher Code</div>
+          <div class="vc-code">SM–X4K9</div>
+          <div class="vc-codeurl">silver-monitor.com/redeem</div>
+        </div>
+      </div>
+      <div class="vc-perf">
+        <div class="vc-dot"></div>
+        <div class="vc-dash"></div>
+        <div class="vc-dot"></div>
+      </div>
+      <div class="vc-bottom">
+        <div class="vc-pill"><span style="font-size:6px;">●</span> Členský voucher</div>
+        <div class="vc-fieldlabel">Telefon · Phone</div>
+        <div class="vc-phone"><span>+420 </span>604 251 244</div>
+        <div class="vc-quote">"Tento voucher odemyká přístup<br>k funkcím Silver Monitor."</div>
+        <div class="vc-row2">
+          <div>
+            <div class="vc-fieldlabel">Platnost do</div>
+            <div class="vc-date">31. 12. 2026</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="vc-fieldlabel">Kód</div>
+            <div class="vc-codeaccent">SM–2026–X4K9</div>
+          </div>
+        </div>
+      </div>
+      <div class="vc-footer">
+        <div>
+          <div class="vc-brandname">silver<span>-monitor</span>.com</div>
+          <div class="vc-brandsub">Trading Intelligence</div>
+        </div>
+        <div class="vc-barcode">
+          <div class="vc-bar" style="width:1.5px;height:11px;"></div><div class="vc-bar" style="width:1px;height:15px;"></div><div class="vc-bar" style="width:2px;height:10px;"></div><div class="vc-bar" style="width:1px;height:16px;"></div><div class="vc-bar" style="width:1.5px;height:13px;"></div><div class="vc-bar" style="width:1px;height:8px;"></div><div class="vc-bar" style="width:1.5px;height:16px;"></div><div class="vc-bar" style="width:1px;height:11px;"></div><div class="vc-bar" style="width:2px;height:14px;"></div><div class="vc-bar" style="width:1px;height:10px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div><!-- end hero-inner -->
 </div>
 
 <!-- TICKER -->
